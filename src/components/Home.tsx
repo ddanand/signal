@@ -3,11 +3,14 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import UserDetails, { UserInfo } from "./UserDetails";
 import Button from "@mui/material/Button";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const formRef = React.useRef<any>();
   const [userInfo, setUserInfo] = React.useState<UserInfo>();
   const [familyInfo, setFamilyInfo] = React.useState([]);
+
+  let navigate = useNavigate();
 
   const addFamilyMember = () => {
     const updatedFamilyInfo = [...familyInfo];
@@ -35,7 +38,10 @@ const Home = () => {
   };
 
   const submitForm = () => {
-    if (formRef && formRef.current) formRef.current.reportValidity();
+    if (formRef && formRef.current) {
+      if (formRef.current.reportValidity())
+        navigate("/meal-plan", { state: { userInfo, familyInfo }});
+    }
     console.log(userInfo, familyInfo);
   };
 
@@ -48,8 +54,8 @@ const Home = () => {
         marginTop={2}
         p={2}
         sx={{
-          color: "green",
-          backgroundColor: "yellow",
+          color: "white",
+          backgroundColor: "#127582",
         }}
       >
         Healthy Food Guide
@@ -61,8 +67,10 @@ const Home = () => {
         sx={{ margin: "2rem 50px 0" }}
       >
         <Box>Welcome to your daily healthy meal plan</Box>
-        <Box>Our application suggests the best meal plan & servings based on your
-        Gender & Age group</Box>
+        <Box>
+          Our application suggests the best meal plan & servings based on your
+          Gender & Age group
+        </Box>
       </Typography>
       <Box mt={2} sx={{ textAlign: "center", fontSize: 20 }}>
         Please enter your details below
@@ -75,7 +83,7 @@ const Home = () => {
       )}
 
       {familyInfo.map((item, index) => (
-        <UserDetails saveInfo={saveInfo} index={index} />
+        <UserDetails key={index} saveInfo={saveInfo} index={index} />
       ))}
       <Box
         sx={{

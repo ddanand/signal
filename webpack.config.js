@@ -16,7 +16,7 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: "ts-loader",
         exclude: /node_modules/,
       },
       {
@@ -27,6 +27,14 @@ module.exports = {
       {
         test: /\.css$/,
         loader: "css-loader",
+      },
+      {
+        test: /\.csv$/,
+        loader: "csv-loader",
+        options: {
+          dynamicTyping: true,
+          header: true,
+        },
       },
     ],
   },

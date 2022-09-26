@@ -16,12 +16,14 @@
     "@types/jest": "^29.0.3",
     "@types/node": "^18.7.20",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.4.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
     "css-loader": "^6.7.1",
+    "csv-loader": "^3.0.5",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.6.1",
     "source-map-loader": "^4.0.0",

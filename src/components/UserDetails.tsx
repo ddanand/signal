@@ -21,64 +21,36 @@ const UserDetails = (props: UserDetailsProps) => {
   const [name, setName] = React.useState("");
   const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
+    saveForm({ name: event.target.value, gender, age });
   };
 
   const [age, setAge] = React.useState("");
   const handleAge = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
+    saveForm({ name, gender, age: event.target.value });
   };
 
   const [gender, setGender] = React.useState("");
   const handleGender = (event: SelectChangeEvent) => {
     setGender(event.target.value as string);
+    saveForm({ name, gender: event.target.value, age });
   };
 
   const ageOptions = [
-    {
-      label: "2-3",
-      value: "2-3",
-    },
-    {
-      label: "4-8",
-      value: "4-8",
-    },
-    {
-      label: "9-13",
-      value: "9-13",
-    },
-    {
-      label: "14-18",
-      value: "14-18",
-    },
-    {
-      label: "19-30",
-      value: "19-30",
-    },
-    {
-      label: "31-50",
-      value: "31-50",
-    },
-    {
-      label: "51-70",
-      value: "51-70",
-    },
-    {
-      label: "71+",
-      value: "71+",
-    },
+    "2 to 3",
+    "4 to 8",
+    "9 to 13",
+    "14 to 18",
+    "19 to 30",
+    "31 to 50",
+    "51 to 70",
+    "71+",
   ];
 
   const genderOptions = ["Male", "Female"];
 
-  const saveForm = () => {
-    props.saveInfo(
-      {
-        name,
-        gender,
-        age,
-      },
-      props.index
-    );
+  const saveForm = (info: UserInfo) => {
+    props.saveInfo(info, props.index);
   };
 
   return (
@@ -103,7 +75,7 @@ const UserDetails = (props: UserDetailsProps) => {
             onChange={handleGender}
           >
             {genderOptions.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
+              <MenuItem key={item} value={item}>{item}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -113,20 +85,19 @@ const UserDetails = (props: UserDetailsProps) => {
             <Select
               required
               labelId="demo-simple-select-label"
-              id="demo-simple-select"
               value={age}
               label="Age"
               onChange={handleAge}
             >
               {ageOptions.map((item) => (
-                <MenuItem value={item.value}>{item.label}</MenuItem>
+                <MenuItem key={item} value={item}>{item}</MenuItem>
               ))}
             </Select>
           </FormControl>
         </Box>
-        <Button sx={{ marginLeft: 2 }} variant="outlined" onClick={saveForm}>
+        {/* <Button sx={{ marginLeft: 2 }} variant="outlined" onClick={saveForm}>
           Save
-        </Button>
+        </Button> */}
       </Box>
     </>
   );
