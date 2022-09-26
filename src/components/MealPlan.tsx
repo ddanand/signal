@@ -21,6 +21,7 @@ const TableHeader = styled("div")({
   backgroundColor: "#1babbd",
   padding: 8,
   fontSize: 24,
+  fontWeight: 700,
   textAlign: "center",
   textTransform: "capitalize",
 });

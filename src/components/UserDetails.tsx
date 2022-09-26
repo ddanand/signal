@@ -63,11 +63,18 @@ const UserDetails = (props: UserDetailsProps) => {
           marginTop: 4,
         }}
       >
-        <TextField required label="Name" value={name} onChange={handleName} />
+        <TextField
+          data-testid="name-input"
+          required
+          label="Name"
+          value={name}
+          onChange={handleName}
+        />
 
         <FormControl sx={{ width: 200, marginLeft: 1, marginRight: 1 }}>
           <InputLabel id="gender-label">Gender *</InputLabel>
           <Select
+            data-testid="select-option-gender"
             required
             labelId="gender-label"
             value={gender}
@@ -75,7 +82,9 @@ const UserDetails = (props: UserDetailsProps) => {
             onChange={handleGender}
           >
             {genderOptions.map((item) => (
-              <MenuItem key={item} value={item}>{item}</MenuItem>
+              <MenuItem key={item} value={item}>
+                {item}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -83,6 +92,7 @@ const UserDetails = (props: UserDetailsProps) => {
           <FormControl sx={{ width: 200 }}>
             <InputLabel id="demo-simple-select-label">Age *</InputLabel>
             <Select
+              data-testid="select-option-age"
               required
               labelId="demo-simple-select-label"
               value={age}
@@ -90,7 +100,9 @@ const UserDetails = (props: UserDetailsProps) => {
               onChange={handleAge}
             >
               {ageOptions.map((item) => (
-                <MenuItem key={item} value={item}>{item}</MenuItem>
+                <MenuItem key={item} value={item}>
+                  {item}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>

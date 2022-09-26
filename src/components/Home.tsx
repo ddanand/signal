@@ -42,7 +42,6 @@ const Home = () => {
       if (formRef.current.reportValidity())
         navigate("/meal-plan", { state: { userInfo, familyInfo }});
     }
-    console.log(userInfo, familyInfo);
   };
 
   return (
