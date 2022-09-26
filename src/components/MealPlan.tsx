@@ -84,7 +84,7 @@ const MealPlan = () => {
       header: true,
       download: true,
       dynamicTyping: true,
-      complete: function (results: { data: Array<FoodGroupValue> }) {
+      complete: (results: { data: Array<FoodGroupValue> }) => {
         const uniqFoodGroups = new Set<string>(); // []
 
         results.data?.forEach(({ foodgroup }: FoodGroupValue) => {
@@ -99,7 +99,7 @@ const MealPlan = () => {
       header: true,
       download: true,
       dynamicTyping: true,
-      complete: function (results: { data: Array<StatementData> }) {
+      complete: (results: { data: Array<StatementData> }) => {
         setStatementsData(results.data);
       },
     });
@@ -107,7 +107,7 @@ const MealPlan = () => {
       header: true,
       download: true,
       dynamicTyping: true,
-      complete: function (results: { data: Array<ServingData> }) {
+      complete: (results: { data: Array<ServingData> }) => {
         setServingsData(results.data);
       },
     });
@@ -115,7 +115,7 @@ const MealPlan = () => {
       header: true,
       download: true,
       dynamicTyping: true,
-      complete: function (results: { data: Array<FoodData> }) {
+      complete: (results: { data: Array<FoodData> }) => {
         setFoodData(results.data);
       },
     });
