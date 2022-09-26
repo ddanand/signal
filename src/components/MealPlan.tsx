@@ -1,17 +1,18 @@
 import * as React from "react";
+import * as Papa from "papaparse";
 import Box from "@mui/material/Box";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import { useLocation } from "react-router-dom";
 // @ts-ignore
-import foodGroupValues from "../../data/foodgroups-en_ONPP.csv";
+import foodGroupCsvData from "../../data/foodgroups-en_ONPP.csv";
 // @ts-ignore
-import statementsData from "../../data/fg_directional_satements-en_ONPP.csv";
+import statementsCsvData from "../../data/fg_directional_satements-en_ONPP.csv";
 // @ts-ignore
-import servingsData from "../../data/servings_per_day-en_ONPP.csv";
+import servingsCsvData from "../../data/servings_per_day-en_ONPP.csv";
 // @ts-ignore
-import foodData from "../../data/foods-en_ONPP_rev.csv";
+import foodCsvData from "../../data/foods-en_ONPP_rev.csv";
 import { UserInfo } from "./UserDetails";
 
 import { styled } from "@mui/system";
@@ -61,6 +62,16 @@ const MealPlan = () => {
   const location = useLocation();
   const { userInfo, familyInfo } = location.state;
   const [foodGroups, setFoodGroups] = React.useState<Array<string>>([]);
+  const [foodGroupsData, setFoodGroupsData] = React.useState<
+    Array<FoodGroupValue>
+  >([]);
+  const [statementsData, setStatementsData] = React.useState<
+    Array<StatementData>
+  >([]);
+  const [servingsData, setServingsData] = React.useState<Array<ServingData>>(
+    []
+  );
+  const [foodData, setFoodData] = React.useState<Array<FoodData>>([]);
 
   const getRandomElements = (arr: any, num: number) => {
     const shuffled = [...arr].sort(() => 0.5 - Math.random());
@@ -69,35 +80,63 @@ const MealPlan = () => {
   };
 
   React.useEffect(() => {
-    console.log(foodGroupValues);
+    Papa.parse(foodGroupCsvData, {
+      header: true,
+      download: true,
+      dynamicTyping: true,
+      complete: function (results: { data: Array<FoodGroupValue> }) {
+        const uniqFoodGroups = new Set<string>(); // []
 
-    const uniqFoodGroups = new Set<string>(); // []
+        results.data?.forEach(({ foodgroup }: FoodGroupValue) => {
+          if (foodgroup) uniqFoodGroups.add(foodgroup);
+        });
 
-    foodGroupValues.forEach(({ foodgroup }: FoodGroupValue) => {
-      if (foodgroup) uniqFoodGroups.add(foodgroup);
+        setFoodGroups(Array.from(uniqFoodGroups));
+        setFoodGroupsData(results.data);
+      },
     });
-
-    setFoodGroups(Array.from(uniqFoodGroups));
+    Papa.parse(statementsCsvData, {
+      header: true,
+      download: true,
+      dynamicTyping: true,
+      complete: function (results: { data: Array<StatementData> }) {
+        setStatementsData(results.data);
+      },
+    });
+    Papa.parse(servingsCsvData, {
+      header: true,
+      download: true,
+      dynamicTyping: true,
+      complete: function (results: { data: Array<ServingData> }) {
+        setServingsData(results.data);
+      },
+    });
+    Papa.parse(foodCsvData, {
+      header: true,
+      download: true,
+      dynamicTyping: true,
+      complete: function (results: { data: Array<FoodData> }) {
+        setFoodData(results.data);
+      },
+    });
   }, []);
 
-  console.log(statementsData);
-
   const calculateServingSize = (info: UserInfo, foodgroup: string) =>
-    servingsData.find(
+    servingsData?.find(
       (data: ServingData) =>
         data.gender === info.gender &&
         data.ages === info.age &&
         data.fgid ==
-          foodGroupValues.find(
+          foodGroupsData?.find(
             (value: FoodGroupValue) => value.foodgroup == foodgroup
           ).fgid
     )?.servings;
 
   const calculateStatements = (foodgroup: string) =>
-    statementsData.filter(
+    statementsData?.filter(
       (data: StatementData) =>
         data.fgid ==
-        foodGroupValues.find(
+        foodGroupsData?.find(
           (value: FoodGroupValue) => value.foodgroup == foodgroup
         ).fgid
     );
@@ -139,7 +178,9 @@ const MealPlan = () => {
               <Box m={1}>
                 <ul>
                   {calculateStatements(foodgroup).map((data: StatementData) => (
-                    <li>{data["directional-statement"]}</li>
+                    <li key={data["directional-statement"]}>
+                      {data["directional-statement"]}
+                    </li>
                   ))}
                 </ul>
               </Box>
@@ -149,8 +190,8 @@ const MealPlan = () => {
               >
                 Food suggestions -{" "}
               </Box>
-              {foodGroupValues
-                .filter(
+              {foodGroupsData
+                ?.filter(
                   (value: FoodGroupValue) => value.foodgroup === foodgroup
                 )
                 .map((value: FoodGroupValue) => (
@@ -167,8 +208,8 @@ const MealPlan = () => {
                             (data: FoodData) => data.fgcat_id === value.fgcat_id
                           ),
                           7
-                        ).map((data: FoodData) => (
-                          <div key={data.food}>
+                        ).map((data: FoodData, index: number) => (
+                          <div key={`${data.food}-${index}`}>
                             {data.food} - {data.srvg_sz}
                           </div>
                         ))}

@@ -30,7 +30,7 @@ module.exports = {
       },
       {
         test: /\.csv$/,
-        loader: "csv-loader",
+        loader: "file-loader",
         options: {
           dynamicTyping: true,
           header: true,
